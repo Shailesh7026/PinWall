@@ -19,7 +19,10 @@ class _GalleryScreenState extends State<GalleryScreen> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<WallpaperProvider>().loadGenre(_selectedGenre);
+      final provider = context.read<WallpaperProvider>();
+      if (provider.state == LoadState.idle && provider.items.isEmpty) {
+        provider.loadGenre(_selectedGenre);
+      }
     });
   }
 
@@ -45,7 +48,7 @@ class _GalleryScreenState extends State<GalleryScreen> {
               scrollDirection: Axis.horizontal,
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
               itemCount: kGenres.length,
-              separatorBuilder: (_, __) => const SizedBox(width: 8),
+              separatorBuilder: (_, _) => const SizedBox(width: 8),
               itemBuilder: (_, i) {
                 final slug = kGenres[i];
                 final selected = slug == _selectedGenre;

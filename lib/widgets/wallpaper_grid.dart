@@ -11,41 +11,46 @@ class WallpaperMasonryGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MasonryView(
-      listOfItem: items,
-      numberOfColumn: 2,
-      itemRadius: 12,
-      itemPadding: 4,
-      itemBuilder: (item) {
-        final media = item as MediaItem;
-        final aspectRatio = (media.width != null && media.height != null)
-            ? media.width! / media.height!
-            : 0.75;
-        return AspectRatio(
-          aspectRatio: aspectRatio,
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(12),
-            child: CachedNetworkImage(
-              imageUrl: media.url,
-              fit: BoxFit.cover,
-              placeholder: (_, __) => Container(
-                color: Colors.grey[200],
-                child: const Center(
-                  child: SizedBox(
-                    width: 20,
-                    height: 20,
-                    child: CircularProgressIndicator(strokeWidth: 2),
+    return SingleChildScrollView(
+      padding: const EdgeInsets.all(6),
+      child: MasonryView(
+        listOfItem: items,
+        numberOfColumn: 2,
+        itemRadius: 12,
+        itemPadding: 4,
+        itemBuilder: (item) {
+          final media = item as MediaItem;
+          final aspectRatio = (media.width != null &&
+                  media.height != null &&
+                  media.height! > 0)
+              ? media.width! / media.height!
+              : 0.75;
+          return AspectRatio(
+            aspectRatio: aspectRatio,
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(12),
+              child: CachedNetworkImage(
+                imageUrl: media.url,
+                fit: BoxFit.cover,
+                placeholder: (_, _) => Container(
+                  color: Colors.grey[200],
+                  child: const Center(
+                    child: SizedBox(
+                      width: 20,
+                      height: 20,
+                      child: CircularProgressIndicator(strokeWidth: 2),
+                    ),
                   ),
                 ),
-              ),
-              errorWidget: (_, __, ___) => Container(
-                color: Colors.grey[300],
-                child: const Icon(Icons.broken_image, color: Colors.grey),
+                errorWidget: (_, _, _) => Container(
+                  color: Colors.grey[300],
+                  child: const Icon(Icons.broken_image, color: Colors.grey),
+                ),
               ),
             ),
-          ),
-        );
-      },
+          );
+        },
+      ),
     );
   }
 }
@@ -63,8 +68,8 @@ class WallpaperGridItem extends StatelessWidget {
       child: CachedNetworkImage(
         imageUrl: imageUrl,
         fit: BoxFit.cover,
-        placeholder: (_, __) => Container(color: Colors.grey[200]),
-        errorWidget: (_, __, ___) => const Icon(Icons.error),
+        placeholder: (_, _) => Container(color: Colors.grey[200]),
+        errorWidget: (_, _, _) => const Icon(Icons.error),
       ),
     );
   }

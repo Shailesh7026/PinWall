@@ -62,7 +62,7 @@ class _AppStartupState extends State<AppStartup> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Image.asset('assets/images/logo.png', width: 80, errorBuilder: (_, __, ___) =>
+            Image.asset('assets/images/logo.png', width: 80, errorBuilder: (_, _, _) =>
               const Icon(Icons.photo_library, size: 80, color: Color(0xFFE60023))),
             const SizedBox(height: 24),
             const Text(

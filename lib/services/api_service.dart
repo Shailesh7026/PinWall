@@ -15,7 +15,7 @@ class ApiService {
     try {
       final res = await _client
           .get(Uri.parse('$kApiBaseUrl/health'))
-          .timeout(const Duration(seconds: 35));
+          .timeout(const Duration(seconds: 65));
       return res.statusCode == 200;
     } catch (_) {
       return false;
@@ -61,7 +61,7 @@ class ApiService {
     final uri = Uri.parse('$kApiBaseUrl/trending').replace(
       queryParameters: {'limit': limit.toString()},
     );
-    final res = await _client.get(uri).timeout(const Duration(seconds: 30));
+    final res = await _client.get(uri).timeout(const Duration(seconds: 45));
     if (res.statusCode == 200) {
       final json = jsonDecode(res.body) as Map<String, dynamic>;
       final list = json['trending'] as List;
@@ -71,7 +71,7 @@ class ApiService {
   }
 
   Future<SearchResponse> _get(Uri uri, String fallbackQuery) async {
-    final res = await _client.get(uri).timeout(const Duration(seconds: 30));
+    final res = await _client.get(uri).timeout(const Duration(seconds: 45));
     if (res.statusCode == 200) {
       return SearchResponse.fromJson(
         jsonDecode(res.body) as Map<String, dynamic>,
