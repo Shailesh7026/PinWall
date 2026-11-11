@@ -1,8 +1,12 @@
-import 'package:flutter/material.dart';
+// Base URL for the PinWall API hosted on Render.
+// Update this once your Render deployment is live.
+const String kApiBaseUrl = 'https://pinwall-api.onrender.com';
 
-class AppColors {
-  static const Color primary = Color(0xFFE60023); 
-  static const Color secondary = Colors.black87;
-  static const Color background = Colors.white;
-  static const Color cardBackground = Color(0xFFF5F5F5);
-}
+const List<String> kGenres = [
+  'nature',
+  'abstract',
+  'minimalist',
+  'dark',
+  'anime',
+  'space',
+];
