@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:pinwall/screens/gallery.dart';
 import 'package:pinwall/screens/home.dart';
 import 'package:pinwall/screens/import.dart';
+import 'package:pinwall/screens/queue_screen.dart';
 import 'package:pinwall/screens/settings.dart';
 
 class CustomBottomNavBar extends StatefulWidget {
@@ -21,10 +21,10 @@ class _CustomBottomNavBarState extends State<CustomBottomNavBar> {
     super.initState();
     _pages = [
       const HomeScreen(),
-      const GalleryScreen(),
-      ImportScreen(onImportComplete: () {
-        setState(() => _currentIndex = 0);
-      }),
+      ImportScreen(
+        onImportComplete: () => setState(() => _currentIndex = 2),
+      ),
+      const QueueScreen(),
       const SettingsScreen(),
     ];
   }
@@ -40,10 +40,26 @@ class _CustomBottomNavBarState extends State<CustomBottomNavBar> {
         selectedIndex: _currentIndex,
         onDestinationSelected: (i) => setState(() => _currentIndex = i),
         destinations: const [
-          NavigationDestination(icon: Icon(Icons.home_outlined), selectedIcon: Icon(Icons.home), label: 'Home'),
-          NavigationDestination(icon: Icon(Icons.grid_view_outlined), selectedIcon: Icon(Icons.grid_view), label: 'Gallery'),
-          NavigationDestination(icon: Icon(Icons.add_box_outlined), selectedIcon: Icon(Icons.add_box), label: 'Import'),
-          NavigationDestination(icon: Icon(Icons.settings_outlined), selectedIcon: Icon(Icons.settings), label: 'Settings'),
+          NavigationDestination(
+            icon: Icon(Icons.explore_outlined),
+            selectedIcon: Icon(Icons.explore),
+            label: 'Explore',
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.dashboard_customize_outlined),
+            selectedIcon: Icon(Icons.dashboard_customize),
+            label: 'Boards',
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.photo_library_outlined),
+            selectedIcon: Icon(Icons.photo_library),
+            label: 'Queue',
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.tune_outlined),
+            selectedIcon: Icon(Icons.tune),
+            label: 'Auto',
+          ),
         ],
       ),
     );

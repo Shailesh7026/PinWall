@@ -1,9 +1,13 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:pinwall/services/background_worker.dart';
 import 'package:pinwall/services/wallpaper_provider.dart';
 import 'package:pinwall/widgets/bootomnavbar.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await BackgroundScheduler.initialize();
   runApp(const MainApp());
 }
 
@@ -29,8 +33,8 @@ class MainApp extends StatelessWidget {
   }
 }
 
-/// Warms up the Render API (free plan sleeps after 15 min),
-/// then shows the main app.
+/// Loads local SQLite cache & queues immediately, wakes Render in background,
+/// and opens the main app cleanly.
 class AppStartup extends StatefulWidget {
   const AppStartup({super.key});
 
@@ -47,7 +51,9 @@ class _AppStartupState extends State<AppStartup> {
 
   Future<void> _init() async {
     final provider = context.read<WallpaperProvider>();
-    await provider.warmUp();
+    await provider.refreshLocalState();
+    // Wake Render in the background without blocking cached UI startup
+    unawaited(provider.warmUp());
     if (mounted) {
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(builder: (_) => const CustomBottomNavBar()),
@@ -62,8 +68,15 @@ class _AppStartupState extends State<AppStartup> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Image.asset('assets/images/logo.png', width: 80, errorBuilder: (_, _, _) =>
-              const Icon(Icons.photo_library, size: 80, color: Color(0xFFE60023))),
+            Image.asset(
+              'assets/images/logo.png',
+              width: 80,
+              errorBuilder: (_, _, _) => const Icon(
+                Icons.photo_library,
+                size: 80,
+                color: Color(0xFFE60023),
+              ),
+            ),
             const SizedBox(height: 24),
             const Text(
               'PinWall',
@@ -71,8 +84,6 @@ class _AppStartupState extends State<AppStartup> {
             ),
             const SizedBox(height: 16),
             const CircularProgressIndicator(color: Color(0xFFE60023)),
-            const SizedBox(height: 12),
-            const Text('Connecting to server…', style: TextStyle(color: Colors.grey)),
           ],
         ),
       ),

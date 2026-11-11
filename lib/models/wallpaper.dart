@@ -25,17 +25,28 @@ class MediaItem {
       isVideo: json['is_video'] as bool? ?? false,
     );
   }
+
+  Map<String, dynamic> toJson() => {
+        'id': id,
+        'url': url,
+        'width': width,
+        'height': height,
+        'alt': alt,
+        'is_video': isVideo,
+      };
 }
 
 class SearchResponse {
   final String query;
   final int count;
   final List<MediaItem> items;
+  final bool fromCache;
 
   SearchResponse({
     required this.query,
     required this.count,
     required this.items,
+    this.fromCache = false,
   });
 
   factory SearchResponse.fromJson(Map<String, dynamic> json) {
